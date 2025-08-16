@@ -197,9 +197,13 @@ export default function App() {
         <h3 className="text-2xl font-semibold mb-6">Contact Us</h3>
         <form
           className="bg-white shadow rounded-2xl p-6 grid gap-4 max-w-lg mx-auto"
+          action="https://formspree.io/f/mdkdvkak"
+          method="POST"        
           onSubmit={(e) => {
             e.preventDefault();
+            // Optional: Show success message or redirect
             alert("Thank you! Your message has been sent.");
+            e.target.reset(); // Clear the form
           }}
         >
           <input type="text" placeholder="Your Name" className="border rounded p-2" required />
