@@ -105,6 +105,7 @@ export default function App() {
       "@type": "PostalAddress",
       "streetAddress": "123 Main St",
       "addressLocality": "Riyadh",
+      "addressRegion": "Riyadh",
       "addressCountry": "SA"
     },
     "sameAs": [
@@ -198,18 +199,59 @@ export default function App() {
         <form
           className="bg-white shadow rounded-2xl p-6 grid gap-4 max-w-lg mx-auto"
           action="https://formspree.io/f/mdkdvkak"
-          method="POST"        
-          onSubmit={(e) => {
+          method="POST"
+          onSubmit={async (e) => {
             e.preventDefault();
-            // Optional: Show success message or redirect
-            alert("Thank you! Your message has been sent.");
-            e.target.reset(); // Clear the form
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            try {
+              const response = await fetch("https://formspree.io/f/mdkdvkak", {
+                method: "POST",
+                body: formData,
+                headers: {
+                  Accept: "application/json",
+                },
+              });
+
+              if (response.ok) {
+                alert("✅ Thank you! Your message has been sent.");
+                form.reset();
+              } else {
+                throw new Error("Form submission failed");
+              }
+            } catch (error) {
+              console.error("Error:", error);
+              alert("❌ Failed to send message. Please try again.");
+            }
           }}
         >
-          <input type="text" placeholder="Your Name" className="border rounded p-2" required />
-          <input type="email" placeholder="Your Email" className="border rounded p-2" required />
-          <textarea placeholder="Message" className="border rounded p-2" rows={4} required />
-          <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded-xl hover:bg-indigo-700 transition">
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            className="border rounded p-2"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            className="border rounded p-2"
+            required
+          />
+          <textarea
+            name="message"
+            placeholder="Message"
+            className="border rounded p-2"
+            rows={4}
+            required
+          />
+          <button
+            type="submit"
+            className="bg-indigo-600 text-white px-4 py-2 rounded-xl hover:bg-indigo-700 transition"
+          >
             Send Message
           </button>
         </form>
